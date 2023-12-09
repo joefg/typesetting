@@ -10,7 +10,7 @@ fontsize:
 papersize:
 - a5
 geometry:
-- margin=1in
+- margin=0.5in
 ---
 
 \maketitle
