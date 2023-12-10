@@ -1,14 +1,13 @@
 ---
 title: |
-	| Lorem Ipsum
+    Lorem Ipsum \
+    The Standard Typesetting Document
 author:
 - "You"
 date:
 - November 2023
 fontsize:
 - 12pt
-papersize:
-- a5
 geometry:
 - margin=0.5in
 ---
