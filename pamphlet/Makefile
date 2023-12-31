@@ -16,8 +16,12 @@ a5: ## Creates a A5-sized PDF
 a4: ## Creates a A4-sized PDF
 	pandoc -V papersize:a4 text.md -o typeset-a4.pdf;
 
-mobile: ## Creates a mobile-sized PDF (80mm x 150mm)
-	pandoc -V geometry:papersize="{80mm,150mm}" text.md -o typeset-mobile.pdf;
+mobile: ## Creates a mobile-sized PDF (80mm x 150mm) with a 5mm margin
+	pandoc \
+		-V geometry:papersize="{80mm,150mm}" \
+		-V geometry:margin=5mm \
+		-V font:11pt \
+		text.md -o typeset-mobile.pdf;
 
 epub: ## Creates an EPUB
 	pandoc text.md -o typeset.epub;
