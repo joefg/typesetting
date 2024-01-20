@@ -9,12 +9,18 @@ all: clean a5 a4 epub mobile ## Builds our files
 clean: ## Cleans generated files
 	rm -f typeset-*.pdf;
 	rm -f typeset.epub;
+	rm -f typeset.html;
 
 a5: ## Creates a A5-sized PDF
 	pandoc -V papersize:a5 text.md -o typeset-a5.pdf;
 
 a4: ## Creates a A4-sized PDF
 	pandoc -V papersize:a4 text.md -o typeset-a4.pdf;
+
+html: ## Creates a singular HTML page
+	pandoc \
+		--template template.html \
+		text.md -o typeset.html
 
 mobile: ## Creates a mobile-sized PDF (80mm x 150mm) with a 5mm margin
 	pandoc \

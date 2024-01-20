@@ -1,7 +1,5 @@
 ---
-title: |
-    Lorem Ipsum \
-    The Standard Typesetting Document
+title: "Lorem Ipsum: The Standard Typesetting Document"
 author:
 - "You"
 date:
