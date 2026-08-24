@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+function help(){
+cat << EOF
+business-card
+
+restore : Fetch dependencies
+build   : Build CV inside container
+clean   : Remove artefacts
+console : Spawn shell inside container
+EOF
+}
+
+function run_restore(){
+	docker pull blang/latex:latest
+}
+
+function run_docker(){
+	cmd="$1"
+	docker run \
+		--mount "type=bind,src=$THISDIR,dst=/data" \
+		-it blang/latex \
+		$cmd
+}
+
+function run_build(){
+	run_docker "make build"
+}
+
+function run_clean(){
+	run_docker "make clean"
+}
+
+function run_console(){
+	run_docker "/bin/bash"
+}
+
+function main(){
+	cmd=${1-default}
+	shift || true
+	case "$cmd" in
+		default|help)
+			help "$@"
+			;;
+		restore)
+			run_restore
+			;;
+		build)
+			run_build
+			;;
+		clean)
+			run_clean
+			;;
+		console)
+			run_console
+			;;
+		*)
+			echo "no-op $cmd"
+			;;
+	esac
+}
+
+main "$@"
