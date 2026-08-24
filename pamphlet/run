@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+THISDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+function help(){
+cat << EOF
+pamphlet
+
+restore                        : Fetch dependencies
+build <a4|a5|mobile|epub|web>  : Build document inside container
+clean                          : Remove artefacts
+EOF
+}
+
+function run_restore(){
+	docker pull pandoc/latex:latest
+}
+
+function run_docker(){
+	cmd="$@"
+	docker run \
+		--mount "type=bind,src=$THISDIR,dst=/data" \
+		-it pandoc/latex \
+		$cmd
+}
+
+function run_clean(){
+	rm -f typeset-*.pdf typeset.epub typeset.html
+}
+
+function run_build(){
+	cmd=${1-default}
+	shift || true
+	case "$cmd" in
+		default|help)
+			help
+			;;
+		a5)
+			run_docker "-V papersize:a5 text.md -o typeset-a5.pdf"
+			;;
+		a4)
+			run_docker "-V papersize:a4 text.md -o typeset-a4.pdf"
+			;;
+		mobile)
+			run_docker \
+				"-V geometry:papersize="{80mm,150mm}"" \
+				"-V geometry:margin=5mm" \
+				"-V font:11pt" \
+				"text.md -o typeset-mobile.pdf"\
+			;;
+		epub)
+			run_docker "text.md -o typeset-a5.epub"
+			;;
+		web)
+			run_docker "--template template.html text.md -o typeset.html"
+			;;
+		*)
+			echo "no-op $cmd"
+			;;
+	esac
+}
+
+function main(){
+	cmd=${1-default}
+	shift || true
+	case "$cmd" in
+		default|help)
+			help "$@"
+			;;
+		restore)
+			run_restore
+			;;
+		build)
+			run_build "$@"
+			;;
+		clean)
+			run_clean
+			;;
+		*)
+			echo "no-op $cmd"
+			;;
+	esac
+}
+
+main "$@"
