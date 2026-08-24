@@ -4,9 +4,7 @@ author:
 - "You"
 date:
 - November 2023
-fontfamily: helvet
 header-includes:
-  - \renewcommand{\familydefault}{\sfdefault}
   - \usepackage{graphicx}
 fontsize:
 - 12pt
