@@ -8,7 +8,7 @@ cat << EOF
 business-card
 
 restore : Fetch dependencies
-build   : Build CV inside container
+build   : Build document inside container
 clean   : Remove artefacts
 console : Spawn shell inside container
 EOF
